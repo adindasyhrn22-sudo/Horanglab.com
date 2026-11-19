@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8"><title>Horanglab LMS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{--bg:#f4f6fb;--sf:#fff;--tx:#1d2433;--mu:#667085;--bd:#dfe3ec;--pr:#1a73e8;--pt:#fff;--ok:#188038;--no:#d93025;--ac:#e8f0fe;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10141c;--sf:#1a202c;--tx:#e8ecf4;--mu:#9aa4b8;--bd:#2c3547;--pr:#6ea8ff;--pt:#0b1220;--ok:#5bd37f;--no:#ff7b72;--ac:#1f2a44;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#10141c;--sf:#1a202c;--tx:#e8ecf4;--mu:#9aa4b8;--bd:#2c3547;--pr:#6ea8ff;--pt:#0b1220;--ok:#5bd37f;--no:#ff7b72;--ac:#1f2a44;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--tx)}
+h1,h2,h3{margin:.2em 0 .5em}button,input,select,textarea{font:inherit;color:inherit}
+input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--bd);border-radius:8px;background:var(--sf);margin:4px 0 10px}
+textarea{min-height:80px}
+.btn{background:var(--pr);color:var(--pt);border:0;padding:10px 18px;border-radius:8px;cursor:pointer;font-weight:600}
+.btn.g{background:transparent;color:var(--pr);border:1px solid var(--bd)}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:18px;margin-bottom:16px}
+.auth{max-width:420px;margin:6vh auto;padding:0 14px}
+.logo{font-size:28px;font-weight:800;color:var(--pr)}
+.tabs{display:flex;gap:6px;margin:10px 0}.tabs button{flex:1;padding:9px;border:1px solid var(--bd);background:var(--sf);border-radius:8px;cursor:pointer}
+.tabs button.on{background:var(--ac);border-color:var(--pr);color:var(--pr);font-weight:600}
+.app{display:flex;min-height:100vh}
+.side{width:230px;background:var(--sf);border-right:1px solid var(--bd);padding:14px 8px;flex-shrink:0}
+.side a{display:block;padding:10px 14px;border-radius:0 24px 24px 0;cursor:pointer;color:var(--tx)}
+.side a.on{background:var(--ac);color:var(--pr);font-weight:600}.side a:hover{background:var(--ac)}
+.main{flex:1;padding:20px;min-width:0;max-width:1000px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:8px;flex-wrap:wrap}
+.hero{background:linear-gradient(120deg,var(--pr),#7b61ff);color:#fff;border-radius:12px;padding:24px;margin-bottom:16px}
+.opt{display:block;padding:8px 10px;border:1px solid var(--bd);border-radius:8px;margin:5px 0;cursor:pointer}
+.ok{color:var(--ok);font-weight:600}.no{color:var(--no);font-weight:600}.mu{color:var(--mu)}
+.big{font-size:44px;font-weight:800}
+table{border-collapse:collapse;width:100%}td,th{border:1px solid var(--bd);padding:6px 8px;text-align:left}
+.sc{overflow-x:auto}.chat{height:300px;overflow-y:auto;background:var(--bg);border-radius:8px;padding:10px;margin-bottom:8px}
+.msg{max-width:80%;padding:7px 11px;border-radius:12px;margin:5px 0;background:var(--sf);border:1px solid var(--bd)}
+.msg.me{margin-left:auto;background:var(--ac)}.msg small{display:block;color:var(--mu);font-size:11px}
+iframe{width:100%;height:520px;border:1px solid var(--bd);border-radius:8px;background:#fff}
+.mh{color:#fff;font-weight:700;font-size:18px;padding:14px 18px;border-radius:12px 12px 0 0;margin-top:18px}.mh span{font-size:22px}.mh+.card{border-radius:0 0 12px 12px;margin-top:0}
+.fm{background:var(--ac);color:var(--pr);padding:12px;border-radius:10px;font-size:22px;text-align:center;font-weight:700;margin:10px 0}
+.ch{display:inline-block;background:var(--ac);color:var(--pr);padding:4px 12px;border-radius:20px;margin:3px 4px 3px 0;font-size:13px}
+.bar{height:14px;border-radius:8px;background:var(--bd);overflow:hidden;margin:4px 0 10px}.bar i{display:block;height:100%;border-radius:8px;transition:width .15s}
+.trk{position:relative;height:170px;border-left:3px solid var(--mu);border-bottom:3px solid var(--mu);margin:8px 0 8px 10px;background:linear-gradient(var(--ac),transparent)}.ball{position:absolute;left:40%;font-size:28px;transition:bottom .15s}
+.tip{background:var(--ac);padding:8px 12px;border-radius:8px}details.f{border:1px solid var(--bd);border-radius:10px;padding:10px 14px;margin:8px 0;background:var(--sf)}details.f summary{cursor:pointer;font-weight:600}
+@media(max-width:760px){.app{flex-direction:column}.side{width:100%;display:flex;overflow-x:auto;padding:6px;border-right:0;border-bottom:1px solid var(--bd)}.side a{white-space:nowrap;border-radius:20px}}
+</style></head><body><div id="root"></div>
+<script>
+// === PENGATURAN PEMILIK ===
+const KKM=75, CODES=["150696"]; // ganti/tambah kode guru di sini
+const CP="Peserta didik mampu menganalisis konsep energi kinetik dan energi potensial serta hubungannya pada peristiwa sehari-hari.";
+const TP=["Menjelaskan pengertian energi kinetik dan energi potensial","Menghitung energi kinetik dan energi potensial dengan rumusnya","Menyajikan data percobaan dalam bentuk grafik","Menerapkan perubahan Ep menjadi Ek pada kasus sehari-hari"];
+const PRE=[
+{q:"Energi yang dimiliki benda karena geraknya disebut…",o:["Energi potensial","Energi kinetik","Energi kimia","Energi panas"],a:1},
+{q:"Rumus energi potensial gravitasi adalah…",o:["Ep = ½ m v²","Ep = m g h","Ep = m / (g h)","Ep = m + g + h"],a:1},
+{q:"Benda 2 kg bergerak dengan kecepatan 3 m/s. Energi kinetiknya…",o:["6 J","9 J","18 J","3 J"],a:1},
+{q:"Buku 1 kg berada di rak setinggi 2 m (g = 10 m/s²). Energi potensialnya…",o:["2 J","10 J","20 J","200 J"],a:2},
+{q:"Satuan energi dalam SI adalah…",o:["Newton","Watt","Joule","Pascal"],a:2}];
+const POST=[
+{q:"Jika kecepatan benda dilipatduakan, energi kinetiknya menjadi…",o:["Dua kali","Tiga kali","Empat kali","Tetap"],a:2},
+{q:"Benda 4 kg bergerak dengan kecepatan 5 m/s. Energi kinetiknya…",o:["20 J","50 J","100 J","10 J"],a:1},
+{q:"Bola 0,5 kg berada pada ketinggian 10 m (g = 10 m/s²). Energi potensialnya…",o:["5 J","50 J","500 J","0,5 J"],a:1},
+{q:"Saat benda jatuh bebas, energi potensialnya … dan energi kinetiknya …",o:["Naik; turun","Turun; naik","Tetap; tetap","Turun; turun"],a:1},
+{q:"Jika gesekan diabaikan, jumlah Ep dan Ek (energi mekanik) benda yang jatuh…",o:["Berubah-ubah","Tetap","Selalu nol","Selalu naik"],a:1}];
+const REF=["Giancoli, D. C. (2014). Physics: Principles with Applications. Pearson.","Halliday, D., Resnick, R., & Walker, J. (2013). Fundamentals of Physics. Wiley.","Kanginan, M. (2016). Fisika untuk SMA/MA. Erlangga.","Kementerian Pendidikan dan Kebudayaan RI. (2022). Capaian Pembelajaran Fisika.","MechSimulator. https://www.mechsimulator.com"];
+const MENU=[["dash","Dashboard"],["akt","Aktivitas Belajar"],["pre","Pretest"],["mat","Materi"],["vid","Video Fenomena"],["sim","Simulasi"],["lkpd","Praktikum (LKPD)"],["dis","Ruang Diskusi"],["post","Posttest"],["ref","Refleksi"],["kelas","Kelas Online"],["rekap","Rekapitulasi Nilai"],["pus","Daftar Pustaka"]];
+// === STATE ===
+let db=null,S={u:JSON.parse(safe("get","hl_user")||"null"),page:"dash",role:"siswa",mode:"login",group:"Kelas",tab:"mech"},M={results:{},chat:{},config:{}},tm=null;
+function safe(op,k,v){try{return op=="get"?localStorage.getItem(k):localStorage.setItem(k,v)}catch(e){return null}}
+const $=s=>document.querySelector(s),esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const key=e=>e.toLowerCase().replace(/[^a-z0-9._~:@+-]/g,"_");
+async function sha(s){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
+const R=t=>M.results[key(S.u.email)+"__"+t];
+async function put(col,id,d){M[col][id]=d;if(db){try{await db.collection(col).doc(id).set(d)}catch(e){alert("Gagal menyimpan: "+(e.message||e))}}else safe("set","hl_"+col,JSON.stringify(M[col]))}
+function save(t,d){return put("results",key(S.u.email)+"__"+t,{uid:S.u.email,name:S.u.name,type:t,ts:Date.now(),...d})}
+// === INIT ===
+if(window.claude)claude.use("db").then(d=>{db=d;if(S.u)subscribe();render()}).catch(()=>{});
+function subscribe(){if(!db)return;const T=S.u.role=="guru";
+ const q=T?db.collection("results"):db.collection("results").where("uid","==",S.u.email);
+ const w=(c,qq,f)=>(qq||db.collection(c)).onSnapshot(s=>{M[c]={};s.docs.forEach(d=>M[c][d.id]=d.data());f()},()=>{});
+ w("results",q,()=>{if(["rekap","dash"].includes(S.page))render()});
+ w("chat",db.collection("chat").orderBy("ts"),updChat);w("config",null,()=>{if(["kelas","vid"].includes(S.page))render()})}
+if(!db&&!window.claude){["results","chat","config"].forEach(c=>{try{M[c]=JSON.parse(safe("get","hl_"+c)||"{}")}catch(e){}})}
+// === AUTH ===
+function authView(){const g=S.role=="guru";return`<div class="auth"><div class="card"><div class="logo">🧪 Horanglab</div><p class="mu">Learning Management System berbasis praktikum</p>
+<div class="tabs"><button class="${!g?"on":""}" onclick="S.role='siswa';render()">Siswa</button><button class="${g?"on":""}" onclick="S.role='guru';render()">Guru</button></div>
+<div class="tabs"><button class="${S.mode=="login"?"on":""}" onclick="S.mode='login';render()">Masuk</button><button class="${S.mode=="reg"?"on":""}" onclick="S.mode='reg';render()">Daftar</button></div>
+${S.mode=="reg"?`<label>Nama lengkap</label><input id="nm">`:""}
+<label>Akun Google</label><input id="em" type="email" placeholder="nama@gmail.com">
+<label>Password LMS</label><input id="pw" type="password">
+${g?`<label>Kode guru</label><input id="kd" placeholder="Diberikan oleh pemilik Horanglab">`:""}
+<div id="err" class="no"></div><button class="btn" style="width:100%" onclick="auth()">${S.mode=="login"?"Masuk":"Daftar"} sebagai ${g?"Guru":"Siswa"}</button>
+<p class="mu" style="font-size:12px">Catatan: verifikasi akun Google di versi ini berupa pencocokan email + password LMS (belum OAuth Google resmi).</p></div></div>`}
+async function auth(){const e=$("#em").value.trim().toLowerCase(),p=$("#pw").value,err=m=>$("#err").textContent=m;
+ if(!/^\S+@\S+\.\S+$/.test(e)||p.length<6)return err("Isi email Google valid dan password minimal 6 karakter.");
+ if(S.role=="guru"&&!CODES.includes(($("#kd").value||"").trim()))return err("Kode guru salah.");
+ const id=key(e),h=await sha(p);let acc=null;
+ if(db){try{const s=await db.collection("accounts").doc(id).get();acc=s.exists?s.data():null}catch(x){}}else{try{acc=JSON.parse(safe("get","hl_acc_"+id))}catch(x){}}
+ if(S.mode=="reg"){if(acc)return err("Akun sudah terdaftar, silakan masuk.");const nm=$("#nm").value.trim();if(!nm)return err("Nama wajib diisi.");
+  acc={email:e,name:nm,role:S.role,pw:h};if(db)await db.collection("accounts").doc(id).set(acc);else safe("set","hl_acc_"+id,JSON.stringify(acc))}
+ else{if(!acc||acc.pw!==h)return err("Email atau password salah.");if(acc.role!==S.role)return err("Akun ini terdaftar sebagai "+acc.role+".")}
+ S.u={email:e,name:acc.name,role:acc.role};safe("set","hl_user",JSON.stringify(S.u));S.page="dash";subscribe();render()}
+function logout(){S.u=null;safe("set","hl_user","null");location.reload()}
+// === VIEWS ===
+function render(){clearInterval(tm);const r=$("#root");if(!S.u){r.innerHTML=authView();return}
+ const T=S.u.role=="guru",menu=MENU.filter(m=>m[0]!="rekap"||true);
+ r.innerHTML=`<div class="app"><nav class="side">${menu.map(m=>`<a class="${S.page==m[0]?"on":""}" onclick="go('${m[0]}')">${m[1]}</a>`).join("")}</nav>
+ <main class="main"><div class="top"><b class="logo" style="font-size:20px">🧪 Horanglab</b><span>${esc(S.u.name)} <span class="mu">(${T?"Guru":"Siswa"})</span> <button class="btn g" onclick="logout()">Keluar</button></span></div>
+ ${db?"":'<div class="card mu">Mode lokal: data hanya tersimpan di perangkat ini. Untuk sinkron ke akun guru, buka lewat tautan terpublikasi.</div>'}
+ ${V[S.page]()}</main></div>`;if(S.page=="dis")updChat();if(S.page=="sim"&&S.tab=="own")simInit();if(S.page=="mat")matU()}
+function go(p){S.page=p;render();scrollTo(0,0)}
+const done=t=>R(t)?'<span class="ok">✓ selesai</span>':'<span class="mu">belum</span>';
+function quiz(t,Q){const r=R(t);
+ if(r)return`<div class="card"><div class="big ${r.score>=KKM?"ok":"no"}">${r.score}</div><b>Skor ${t=="pre"?"Pretest":"Posttest"}</b> · KKM ${KKM}
+ ${Q.map((q,i)=>`<p><b>${i+1}. ${q.q}</b><br>Jawabanmu: <span class="${r.ans[i]==q.a?"ok":"no"}">${q.o[r.ans[i]]??"(kosong)"}</span>${r.ans[i]!=q.a?` · Benar: <span class="ok">${q.o[q.a]}</span>`:""}</p>`).join("")}</div>`;
+ return`<div class="card">${Q.map((q,i)=>`<p><b>${i+1}. ${q.q}</b></p>${q.o.map((o,j)=>`<label class="opt"><input type="radio" name="q${i}" value="${j}" style="width:auto;margin-right:8px">${o}</label>`).join("")}`).join("")}
+ <button class="btn" onclick="sendQuiz('${t}')">Kirim jawaban</button></div>`}
+async function sendQuiz(t){const Q=t=="pre"?PRE:POST,ans=Q.map((q,i)=>{const c=document.querySelector(`input[name=q${i}]:checked`);return c?+c.value:null});
+ if(ans.includes(null)&&!confirm("Masih ada soal kosong. Kirim tetap?"))return;
+ const sc=Math.round(Q.filter((q,i)=>ans[i]==q.a).length/Q.length*100);await save(t,{score:sc,ans});render()}
+const V={
+dash(){const pre=R("pre"),post=R("post");return`<div class="hero"><h2>Selamat datang, ${esc(S.u.name)} 👋</h2>Dashboard pembelajaran Horanglab · Topik: Energi Kinetik dan Energi Potensial</div>
+<div class="card"><h3>Capaian Pembelajaran</h3><p>${CP}</p></div><div class="card"><h3>Tujuan Pembelajaran</h3><ol>${TP.map(t=>`<li>${t}</li>`).join("")}</ol></div>
+${S.u.role=="siswa"?`<div class="card"><h3>Progres kamu</h3><div class="sc"><table><tr><td>Pretest</td><td>${pre?pre.score:done("pre")}</td></tr><tr><td>Praktikum</td><td>${done("lkpd")}</td></tr><tr><td>Diskusi</td><td>${done("diskusi")}</td></tr><tr><td>Posttest</td><td>${post?post.score:done("post")}</td></tr><tr><td>Refleksi</td><td>${done("refleksi")}</td></tr></table></div></div>`:`<div class="card">Buka menu <b>Rekapitulasi Nilai</b> untuk melihat hasil siswa dan <b>Kelas Online</b> untuk mengatur tautan Meet/Zoom.</div>`}`},
+akt(){const n=(x,y,t,c)=>`<g><rect x="${x-62}" y="${y-18}" width="124" height="36" rx="18" fill="${c||"var(--ac)"}" stroke="var(--pr)"/><text x="${x}" y="${y+5}" text-anchor="middle" font-size="12" fill="var(--tx)">${t}</text></g>`;
+ const L=[[350,50,120,150],[350,50,350,150],[350,50,580,150],[120,150,60,260],[120,150,180,260],[350,150,350,260],[580,150,520,260],[580,150,640,260]];
+ return`<div class="card"><h2>Aktivitas Belajar</h2><p class="mu">Peta konsep Energi Kinetik dan Energi Potensial</p><div class="sc"><svg viewBox="0 0 700 310" width="100%" style="min-width:560px">${L.map(l=>`<line x1="${l[0]}" y1="${l[1]+18}" x2="${l[2]}" y2="${l[3]-18}" stroke="var(--mu)"/>`).join("")}
+ ${n(350,50,"Energi Mekanik","var(--pr)").replace('fill="var(--tx)"','fill="var(--pt)"')}${n(120,150,"Energi Kinetik")}${n(350,150,"Energi Potensial")}${n(580,150,"Perubahan Energi")}
+ ${n(60,260,"Ek = ½ m v²")}${n(180,260,"Karena gerak")}${n(350,260,"Ep = m g h")}${n(520,260,"Ep ⇄ Ek")}${n(640,260,"Em tetap (tanpa gesekan)")}</svg></div></div>
+ <div class="card"><h3>Alur kegiatan</h3><ol><li>Pretest</li><li>Materi & pertanyaan pemantik</li><li>Video fenomena</li><li>Simulasi</li><li>Praktikum (LKPD)</li><li>Diskusi</li><li>Posttest → Pengayaan / Remedial</li><li>Refleksi</li></ol></div>`},
+pre(){return`<h2>Pretest</h2><p class="mu">Skor langsung tampil setelah kamu mengirim jawaban.</p>`+quiz("pre",PRE)},
+post(){const r=R("post");let x=`<h2>Posttest</h2>`+quiz("post",POST);
+ if(r)x+=r.score>=KKM?`<div class="card"><h3 class="ok">🎉 Pengayaan</h3><p>Skor memenuhi KKM. Tantangan: kereta roller coaster bermassa 400 kg berada di puncak setinggi 25 m. Hitung energi potensialnya dan perkirakan kecepatan di dasar lintasan jika gesekan diabaikan (g = 10 m/s²). Tulis jawabanmu di Refleksi.</p></div>`:`<div class="card"><h3 class="no">Remedial</h3><p>Skor belum memenuhi KKM (${KKM}). Ulangi materi: pelajari kembali menu <b>Materi</b>, coba <b>Simulasi</b> dengan mengubah ketinggian dan massa, lalu kerjakan latihan: (1) m = 2 kg, v = 6 m/s, Ek = ? (2) m = 3 kg, h = 5 m, Ep = ? Hubungi gurumu melalui Ruang Diskusi untuk remedial.</p><button class="btn g" onclick="go('mat')">Buka Materi</button></div>`;return x},
+mat(){const r=R("mat");return`<h2>Materi: Energi Kinetik dan Energi Potensial</h2><div class="card"><h3>Kasus</h3><p>🎢 Di sebuah taman hiburan, kereta roller coaster ditarik perlahan ke puncak lintasan yang tinggi, lalu dilepas. Di puncak kereta nyaris diam, tetapi saat meluncur turun kecepatannya makin besar dan di dasar lintasan kereta melaju sangat kencang. Kereta yang penuh penumpang terasa lebih sulit dihentikan dibanding kereta kosong.</p>
+<p class="mu">Perhatikan: apa yang berubah dari puncak ke dasar lintasan?</p></div>
+<div class="card"><h3>Pertanyaan pemantik</h3><label>1. Mengapa kereta melaju makin cepat saat turun dari puncak?</label><textarea id="m1">${esc(r?.a1)}</textarea><label>2. Mengapa kereta yang lebih berat lebih sulit dihentikan pada kecepatan yang sama?</label><textarea id="m2">${esc(r?.a2)}</textarea><button class="btn" onclick="save('mat',{a1:$('#m1').value,a2:$('#m2').value}).then(()=>{alert('Jawaban tersimpan & terkirim ke guru');render()})">Simpan jawaban</button></div>`+matMore()},
+vid(){const u=M.config.main?.video||"",T=S.u.role=="guru";return`<h2>Video Fenomena</h2><div class="card">${u?`<iframe src="${esc(u)}" allowfullscreen></iframe>`:'<p class="mu">Guru belum menambahkan video.</p>'}
+${T?`<hr><label>Tautan embed video (contoh: https://www.youtube.com/embed/ID_VIDEO)</label><input id="vu" value="${esc(u)}"><button class="btn" onclick="cfg({video:$('#vu').value.trim()})">Simpan video</button>`:""}</div>
+<div class="card"><b>Renungkan:</b> Fenomena apa yang kamu amati? Apa yang membuat benda bergerak atau berhenti?</div>`},
+sim(){const t=S.tab;return`<h2>Simulasi</h2><div class="tabs"><button class="${t=="mech"?"on":""}" onclick="S.tab='mech';render()">MechSimulator</button><button class="${t=="own"?"on":""}" onclick="S.tab='own';render()">Simulasi Horanglab</button></div>
+${t=="mech"?`<div class="card"><iframe src="https://www.mechsimulator.com" title="MechSimulator"></iframe><p class="mu">Jika tampilan kosong, situs menolak ditanam. <a href="https://www.mechsimulator.com" target="_blank" rel="noopener">Buka di tab baru</a>.</p></div>`:
+`<div class="card"><canvas id="cv" width="640" height="240" style="width:100%;background:var(--bg);border-radius:8px"></canvas>
+<label>Ketinggian h: <b id="fv">10</b> m</label><input id="F" type="range" min="1" max="20" value="10" oninput="simU()"><label>Massa m: <b id="mv">2</b> kg</label><input id="m" type="range" min="1" max="10" value="2" oninput="simU()"><p>Ep = <b id="epv"></b> J · Ek = <b id="av"></b> J · v = <b id="vv"></b> m/s</p><button class="btn" onclick="S.y=S.h;S.v=0;S.drop=1">▶ Jatuhkan bola</button></div>`}`},
+lkpd(){const r=R("lkpd")||{},d=r.data||[];return`<h2>Praktikum – LKPD</h2><div class="card"><p><b>Judul:</b> Hubungan ketinggian dan energi kinetik saat benda jatuh</p><p><b>Petunjuk:</b> Buka menu Simulasi (tab Simulasi Horanglab), atur m = 2 kg. Untuk tiap ketinggian h, jatuhkan bola dan catat Ek saat tiba di tanah, lalu klik Buat grafik. <i>Guru dapat mengganti isi LKPD ini.</i></p>
+<div class="sc"><table><tr><th>No</th><th>h (m)</th><th>Ek di tanah (J)</th></tr>${[0,1,2,3,4].map(i=>`<tr><td>${i+1}</td><td><input class="fx" type="number" value="${d[i]?.[0]??""}"></td><td><input class="fy" type="number" step="any" value="${d[i]?.[1]??""}"></td></tr>`).join("")}</table></div>
+<button class="btn g" onclick="chart()">Buat grafik</button><div id="gr" class="sc"></div>
+<label>1. Bagaimana hubungan ketinggian h dan Ek di tanah pada grafikmu?</label><textarea id="l1">${esc(r.q1)}</textarea><label>2. Hitung gradien grafik. Apa artinya (petunjuk: m · g)?</label><textarea id="l2">${esc(r.q2)}</textarea><label>3. Kesimpulan percobaan</label><textarea id="l3">${esc(r.q3)}</textarea>
+<button class="btn" onclick="saveL()">Kumpulkan LKPD</button> ${r.ts?'<span class="ok">✓ terkumpul</span>':""}</div>`},
+dis(){const gs=["Kelas","Kelompok 1","Kelompok 2","Kelompok 3","Kelompok 4","Guru"],r=R("diskusi")||{};return`<h2>Ruang Diskusi</h2><div class="card"><select onchange="S.group=this.value;updChat()">${gs.map(g=>`<option ${g==S.group?"selected":""}>${g}</option>`).join("")}</select><div id="ch" class="chat"></div><div style="display:flex;gap:8px"><input id="ci" placeholder="Tulis pesan…" onkeydown="if(event.key=='Enter')sendC()"><button class="btn" onclick="sendC()">Kirim</button></div></div>
+<div class="card"><h3>Pertanyaan hasil diskusi</h3><label>1. Apa kesepakatan kelompok tentang penyebab gerak benda?</label><textarea id="d1">${esc(r.d1)}</textarea><label>2. Contoh penerapan Hukum Newton dalam kehidupan?</label><textarea id="d2">${esc(r.d2)}</textarea><button class="btn" onclick="save('diskusi',{d1:$('#d1').value,d2:$('#d2').value}).then(()=>alert('Terkirim ke guru'))">Kirim jawaban</button></div>`},
+ref(){const r=R("refleksi")||{};return`<h2>Refleksi</h2><div class="card"><label>Apa yang sudah aku pahami?</label><textarea id="r1">${esc(r.r1)}</textarea><label>Bagian mana yang masih sulit?</label><textarea id="r2">${esc(r.r2)}</textarea><label>Rencana belajarku selanjutnya</label><textarea id="r3">${esc(r.r3)}</textarea><button class="btn" onclick="save('refleksi',{r1:$('#r1').value,r2:$('#r2').value,r3:$('#r3').value}).then(()=>alert('Refleksi tersimpan'))">Simpan refleksi</button></div>`},
+kelas(){const l=M.config.main?.meet,T=S.u.role=="guru";return`<h2>Kelas Online</h2><div class="card">${l?`<p>Kelas online sudah dibuka.</p><a class="btn" style="text-decoration:none;display:inline-block" href="${esc(l)}" target="_blank" rel="noopener">Gabung Google Meet / Zoom</a>`:'<p class="mu">Guru belum membagikan tautan kelas online.</p>'}
+${T?`<hr><label>Tautan Meet/Zoom</label><input id="ml" value="${esc(l||"")}" placeholder="https://meet.google.com/..."><button class="btn" onclick="cfg({meet:$('#ml').value.trim()})">Bagikan ke siswa</button>`:""}</div>`},
+rekap(){const all=Object.values(M.results),T=S.u.role=="guru",by={};all.forEach(r=>{(by[r.uid]=by[r.uid]||{name:r.name,r:{}}).r[r.type]=r});
+ const rows=Object.entries(by).filter(([u])=>T||u==S.u.email);const c=(r,t)=>r[t]?(r[t].score??"✓"):"–";
+ return`<h2>Rekapitulasi Penilaian</h2><div class="card sc">${rows.length?`<table><tr><th>Siswa</th><th>Pretest</th><th>Materi</th><th>LKPD</th><th>Diskusi</th><th>Posttest</th><th>Refleksi</th></tr>${rows.map(([u,s])=>`<tr><td>${esc(s.name)}<br><small class="mu">${esc(u)}</small></td>${["pre","mat","lkpd","diskusi","post","refleksi"].map(t=>`<td class="${s.r[t]?.score>=KKM?"ok":""}">${c(s.r,t)}</td>`).join("")}</tr>`).join("")}</table>`:'<p class="mu">Belum ada data.</p>'}</div>
+${T?rows.map(([u,s])=>`<details class="card"><summary><b>${esc(s.name)}</b> – detail jawaban</summary>${["mat","lkpd","diskusi","refleksi"].filter(t=>s.r[t]).map(t=>`<p><b>${t.toUpperCase()}</b><br>${Object.entries(s.r[t]).filter(([k])=>!["uid","name","type","ts","data"].includes(k)).map(([k,v])=>`${esc(k)}: ${esc(v)}`).join("<br>")}</p>`).join("")||'<span class="mu">Belum ada jawaban esai.</span>'}</details>`).join(""):""}`},
+pus(){return`<h2>Daftar Pustaka</h2><div class="card"><ol>${REF.map(x=>`<li>${esc(x)}</li>`).join("")}</ol></div>`}};
+// === HELPERS ===
+function matMore(){const H=(c,i,t)=>`<div class='mh' style='background:${c}'><span>${i}</span> ${t}</div>`;const sl=(id,l,a,b,v,u)=>`<label>${l}: <b id='${id}v'>${v}</b> ${u}</label><input id='${id}' type='range' min='${a}' max='${b}' value='${v}' oninput='matU()'>`;const Q=(q,o,c,t)=>`<div class='q' data-t='${t}'><p><b>${q}</b></p>${o.map((x,i)=>`<button class='btn g' style='margin:3px' onclick='mq(this,${i==c})'>${x}</button>`).join('')}<p class='fb'></p></div>`;
+return `<h2 style='margin-top:30px'>✨ Jelajahi Materi</h2>${H('linear-gradient(120deg,#f59e0b,#ef4444)','⚡','1. Energi Kinetik')}<div class='card'><p>Energi kinetik adalah energi yang dimiliki benda karena <b>geraknya</b>. Makin cepat dan makin berat benda, makin besar energinya.</p><div class='fm'>Ek = ½ · m · v²</div><p><span class='ch'>🚗 Mobil melaju</span><span class='ch'>🏃 Pelari sprint</span><span class='ch'>🌊 Air terjun</span></p><b>🎮 Coba sendiri</b>${sl('ka','Massa m',1,100,10,'kg')}${sl('kb','Kecepatan v',0,40,10,'m/s')}<h3>Ek = <span id='ekr'></span> joule</h3><div class='bar'><i id='ekbar' style='background:#ef4444'></i></div><p class='tip'>💡 Kecepatan dikuadratkan: jika v menjadi dua kali, Ek menjadi <b>empat kali</b>!</p></div>
+${H('linear-gradient(120deg,#0ea5e9,#6366f1)','🏔️','2. Energi Potensial Gravitasi')}<div class='card'><p>Energi potensial adalah energi yang tersimpan pada benda karena <b>posisi atau ketinggiannya</b>. Makin tinggi dan makin berat, makin besar energi tersimpannya (g = 10 m/s²).</p><div class='fm'>Ep = m · g · h</div><p><span class='ch'>🍎 Buah di pohon</span><span class='ch'>💧 Air di bendungan</span><span class='ch'>🧗 Pendaki di tebing</span></p><b>🎮 Coba sendiri</b>${sl('pa','Massa m',1,100,10,'kg')}${sl('pb','Ketinggian h',0,50,10,'m')}<h3>Ep = <span id='epr'></span> joule</h3><div class='bar'><i id='epbar' style='background:#6366f1'></i></div><p class='tip'>💡 Ketinggian dua kali lebih besar → Ep juga dua kali lebih besar.</p></div>
+${H('linear-gradient(120deg,#10b981,#8b5cf6)','🔄','3. Ep dan Ek Saling Berubah')}<div class='card'><p>Saat benda jatuh, ketinggian turun sehingga Ep berkurang, tetapi kecepatan naik sehingga Ek bertambah. Jika gesekan diabaikan, jumlahnya tetap: <b>Em = Ep + Ek</b>.</p><p>Geser ketinggian bola (m = 2 kg):</p>${sl('hs','Ketinggian h',0,20,12,'m')}<div class='trk'><div id='ball' class='ball'>⚽</div></div>Ep = <b id='mEp'></b> J<div class='bar'><i id='mbp' style='background:#6366f1'></i></div>Ek = <b id='mEk'></b> J · v = <b id='mV'></b> m/s<div class='bar'><i id='mbk' style='background:#ef4444'></i></div><p class='tip'>💡 Perhatikan: kedua batang selalu berjumlah 400 J.</p></div>
+${H('linear-gradient(120deg,#ec4899,#f59e0b)','🤔','4. Tahukah Kamu?')}<div class='card'><details class='f'><summary>🎢 Mengapa puncak roller coaster dibuat paling tinggi?</summary><p>Ep di puncak diubah menjadi Ek saat meluncur. Tanpa Ep awal yang besar, kereta tidak punya cukup energi untuk melewati seluruh lintasan.</p></details><details class='f'><summary>🚗 Mengapa ngebut jauh lebih berbahaya?</summary><p>Karena Ek bergantung pada v², mobil 100 km/jam memiliki Ek sekitar empat kali mobil 50 km/jam, sehingga jarak pengeremannya jauh lebih panjang.</p></details><details class='f'><summary>💡 Bagaimana PLTA menghasilkan listrik?</summary><p>Air di bendungan memiliki Ep besar. Air dijatuhkan sehingga Ep berubah menjadi Ek, lalu memutar turbin dan generator menjadi energi listrik.</p></details></div>
+${H('linear-gradient(120deg,#14b8a6,#3b82f6)','🧠','5. Cek Pemahaman Cepat')}<div class='card'>${Q('Mobil A dan B bermassa sama. Mobil B melaju dua kali lebih cepat. Ek mobil B dibanding A adalah…',['2 kali','Sama','4 kali'],2,'Ek sebanding dengan v kuadrat, jadi 2 kuadrat = 4 kali.')}${Q('Buku dipindah dari lantai ke rak yang lebih tinggi. Energi potensialnya…',['Berkurang','Bertambah','Tetap'],1,'Ep = m g h. Jika h naik maka Ep ikut naik.')}${Q('Bola jatuh bebas dan berada di tengah ketinggian awalnya. Hubungan Ek dan Ep…',['Ek lebih besar dari Ep','Ep sama dengan nol','Ek sama dengan Ep'],2,'Di tengah, separuh Ep sudah berubah menjadi Ek, jumlah keduanya tetap.')}</div>
+<div class='card'><h3>📌 Ringkasan</h3><div class='sc'><table><tr><th></th><th>Energi Kinetik</th><th>Energi Potensial</th></tr><tr><td>Dimiliki karena</td><td>Gerak</td><td>Ketinggian/posisi</td></tr><tr><td>Rumus</td><td>½ m v²</td><td>m g h</td></tr><tr><td>Bergantung pada</td><td>m dan v</td><td>m, g, dan h</td></tr><tr><td>Satuan</td><td>Joule (J)</td><td>Joule (J)</td></tr></table></div><p class='fm'>Em = Ep + Ek = tetap</p><button class='btn' onclick='go(&quot;vid&quot;)'>Lanjut ke Video Fenomena →</button></div>`}
+function mq(b,ok){const p=b.parentNode;p.querySelectorAll('button').forEach(x=>x.disabled=true);b.style.background=ok?'var(--ok)':'var(--no)';b.style.color='#fff';p.querySelector('.fb').innerHTML=(ok?'✅ Tepat! ':'❌ Belum tepat. ')+p.parentNode.dataset.t}
+function matU(){const g=i=>$('#'+i);if(!g('ka'))return;const n=x=>Math.round(x).toLocaleString('id-ID'),V=i=>+g(i).value;const m=V('ka'),v=V('kb'),ek=.5*m*v*v;g('kav').textContent=m;g('kbv').textContent=v;g('ekr').textContent=n(ek);g('ekbar').style.width=Math.max(2,ek/800)+'%';const m2=V('pa'),h=V('pb'),ep=m2*10*h;g('pav').textContent=m2;g('pbv').textContent=h;g('epr').textContent=n(ep);g('epbar').style.width=Math.max(2,ep/500)+'%';const hh=V('hs'),P=20*hh,K=400-P;g('hsv').textContent=hh;g('mEp').textContent=P;g('mEk').textContent=K;g('mV').textContent=Math.sqrt(K).toFixed(1);g('mbp').style.width=Math.max(2,P/4)+'%';g('mbk').style.width=Math.max(2,K/4)+'%';g('ball').style.bottom=hh/20*85+'%'}
+function cfg(d){put("config","main",{...(M.config.main||{}),...d}).then(()=>{alert("Tersimpan");render()})}
+function chart(){const p=[...document.querySelectorAll(".fx")].map((e,i)=>[+e.value,+document.querySelectorAll(".fy")[i].value,e.value!==""&&document.querySelectorAll(".fy")[i].value!==""]).filter(x=>x[2]);
+ if(p.length<2){$("#gr").innerHTML='<p class="no">Isi minimal 2 baris data.</p>';return}
+ const mx=Math.max(...p.map(x=>x[0]))||1,my=Math.max(...p.map(x=>x[1]))||1,X=v=>50+v/mx*420,Y=v=>230-v/my*200;
+ $("#gr").innerHTML=`<svg viewBox="0 0 500 270" width="100%" style="max-width:520px"><line x1="50" y1="230" x2="480" y2="230" stroke="var(--mu)"/><line x1="50" y1="20" x2="50" y2="230" stroke="var(--mu)"/><text x="250" y="262" font-size="12" fill="var(--tx)" text-anchor="middle">h (m)</text><text x="12" y="125" font-size="12" fill="var(--tx)" transform="rotate(-90 12 125)">Ek (J)</text><text x="50" y="244" font-size="10" fill="var(--mu)">0</text><text x="${X(mx)}" y="244" font-size="10" fill="var(--mu)" text-anchor="middle">${mx}</text><text x="44" y="${Y(my)+4}" font-size="10" fill="var(--mu)" text-anchor="end">${my}</text>
+ <polyline fill="none" stroke="var(--pr)" stroke-width="2" points="${[...p].sort((a,b)=>a[0]-b[0]).map(x=>X(x[0])+","+Y(x[1])).join(" ")}"/>${p.map(x=>`<circle cx="${X(x[0])}" cy="${Y(x[1])}" r="4" fill="var(--no)"/>`).join("")}</svg>`}
+function saveL(){const d=[...document.querySelectorAll(".fx")].map((e,i)=>[e.value,document.querySelectorAll(".fy")[i].value]);
+ save("lkpd",{data:d,q1:$("#l1").value,q2:$("#l2").value,q3:$("#l3").value}).then(()=>{alert("LKPD terkumpul ke guru");render()})}
+function updChat(){const c=$("#ch");if(!c)return;const ms=Object.values(M.chat).filter(m=>m.g==S.group).sort((a,b)=>a.ts-b.ts);
+ c.innerHTML=ms.map(m=>`<div class="msg ${m.u==S.u.email?"me":""}"><small>${esc(m.n)}${m.role=="guru"?" (Guru)":""}</small>${esc(m.t)}</div>`).join("")||'<p class="mu">Belum ada pesan.</p>';c.scrollTop=c.scrollHeight}
+function sendC(){const i=$("#ci"),t=i.value.trim();if(!t)return;i.value="";const id="m"+Date.now()+Math.random().toString(36).slice(2,6);put("chat",id,{g:S.group,t,u:S.u.email,n:S.u.name,role:S.u.role,ts:Date.now()}).then(updChat);updChat()}
+function simU(){const h=+$("#F").value,m=+$("#m").value;$("#fv").textContent=h;$("#mv").textContent=m;S.h=h;S.m=m;if(!S.drop){S.y=h;S.v=0}simUp()}
+function simUp(){const ek=S.m*10*(S.h-S.y);$("#epv").textContent=(S.m*10*S.y).toFixed(0);$("#av").textContent=ek.toFixed(0);$("#vv").textContent=Math.sqrt(2*10*Math.max(0,S.h-S.y)).toFixed(1)}
+function simInit(){S.drop=0;simU();const x=$("#cv").getContext("2d"),col=getComputedStyle(document.body).color;tm=setInterval(()=>{if(S.drop){S.v+=.3;S.y-=S.v*.03;if(S.y<=0){S.y=0;S.drop=0}simUp()}x.clearRect(0,0,640,240);x.fillStyle=col;x.fillRect(0,230,640,4);x.setLineDash([4,4]);x.strokeStyle="#888";x.beginPath();x.moveTo(250,230-S.h*10);x.lineTo(390,230-S.h*10);x.stroke();x.setLineDash([]);x.fillText(S.h+" m",395,234-S.h*10);x.fillStyle="#1a73e8";x.beginPath();x.arc(320,222-S.m-S.y*10,8+S.m,0,7);x.fill()},30)}
+render();
+</script></body></html>
